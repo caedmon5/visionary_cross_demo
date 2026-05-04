@@ -438,11 +438,47 @@ function showHighlight(id) {
   presenter.repaint();
 }
 
+    var panelToFace = {
+      angels: "front",
+      archer: "front",
+      bottom: "front",
+      magdalene: "front",
+      lamb: "back",
+      raven: "back",
+      left_side: "left",
+      right_cross_bar: "right"
+    };
+
     function highlightPanel(id) {
       activeSpot = id;
       showHighlight(id);
-      updateUrlState();
       setActivePanelItem(id);
+
+      var face = panelToFace[id];
+      if (face) {
+        // setActiveDirection rotates the model and writes the URL hash
+        setActiveDirection(face);
+      } else {
+        updateUrlState();
+      }
+    }
+
+    function clearPanelSelection() {
+      activeSpot = null;
+      clearHighlights();
+      clearActivePanelItem();
+
+      var noneItem = document.querySelector('[data-panel-id="none"]');
+      if (noneItem) noneItem.classList.add("active");
+
+      updateUrlState();
+    }
+
+    function clearActivePanelItem() {
+      var items = document.querySelectorAll(".panel-item");
+      items.forEach(function (item) {
+        item.classList.remove("active");
+      });
     }
 
     function hoverPanel(id) {
@@ -504,6 +540,9 @@ function showHighlight(id) {
       activeFace = null;
       activeSpot = null;
       clearHighlights();
+      clearActivePanelItem();
+      var directionButtons = document.querySelectorAll(".direction-card");
+      directionButtons.forEach(function (b) { b.classList.remove("active"); });
       if (presenter) presenter.resetTrackball();
       updateUrlState();
     }
