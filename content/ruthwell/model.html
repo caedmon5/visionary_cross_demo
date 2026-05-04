@@ -103,7 +103,7 @@
         <div id="tdhlg"></div>
 
         <div id="toolbar">
-          <img id="home" title="Home" src="../../3dhop/skins/dark/home.png" onclick="actionsToolbar('home')" /><br/>
+          <img id="home" title="Clear State" src="../../3dhop/skins/dark/home.png" onclick="actionsToolbar('home')" /><br/>
           <img id="zoomin" title="Zoom In" src="../../3dhop/skins/dark/zoomin.png" onclick="actionsToolbar('zoomin')" /><br/>
           <img id="zoomout" title="Zoom Out" src="../../3dhop/skins/dark/zoomout.png" onclick="actionsToolbar('zoomout')" /><br/>
           <img id="light" title="Enable Light Control" src="../../3dhop/skins/dark/lightcontrol.png" onclick="actionsToolbar('light')" /><br/>
@@ -500,6 +500,14 @@ function showHighlight(id) {
       history.replaceState(null, "", location.pathname + location.search + hash);
     }
 
+    function clearAllState() {
+      activeFace = null;
+      activeSpot = null;
+      clearHighlights();
+      if (presenter) presenter.resetTrackball();
+      updateUrlState();
+    }
+
     function applyUrlState() {
       if (!location.hash) return;
       var params = {};
@@ -532,7 +540,7 @@ function showHighlight(id) {
     function actionsToolbar(action) {
       if (!presenter) return;
 
-      if (action === "home") presenter.resetTrackball();
+      if (action === "home") clearAllState();
       else if (action === "zoomin") presenter.zoomIn();
       else if (action === "zoomout") presenter.zoomOut();
       else if (action === "light") presenter.enableLightTrackball(!presenter.isLightTrackballEnabled());
